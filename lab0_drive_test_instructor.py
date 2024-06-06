@@ -52,11 +52,13 @@ try:
         )
 
         # 3. WRITE DRIVE COMMANDS TO THE MOTORS
-        throttle = MAX_THROTTLE * np.sin(t*2*np.pi/5)
         #throttle = MAX_THROTTLE
-
-        #steering = MAX_STEERING * np.sin(t*2*np.pi/2.5)
-        steering = 0 #MAX_STEERING
+        throttle = MAX_THROTTLE * np.sin(t*2*np.pi/5)
+        
+        #steering = 0 
+        #steering = MAX_STEERING
+        steering = MAX_STEERING * np.sin(t*2*np.pi/2.5)
+        
 
         # 4. TURN ON THE LIGHTS
         LEDs = np.array([0, 0, 0, 0, 0, 0, 1, 1])
