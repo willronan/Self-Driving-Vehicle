@@ -1,4 +1,4 @@
-''' Lab0_motors&lights.py
+''' Lab0_drive_test.py
 
 This walkthrough is designed to give you a basic understanding of
 how to write commands to the QCar's lights, steering servo, and
