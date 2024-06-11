@@ -44,19 +44,14 @@ gpad  = LogitechF710()
 
 
 def control_from_gamepad(LB, RT, leftLateral, A):
-    #----- 2. IMPLEMENT GAMEPAD CONTROLS -----#	
-	if LB == 1:
-			if A == 1 :
-				throttle_axis = -0.3 * RT #going backward
-				steering_axis = leftLateral * 0.5
-			else:
-				throttle_axis = 0.3 * RT #going forward
-				steering_axis = leftLateral * 0.5
-	else:
-		throttle_axis = 0
-		steering_axis = 0
+    #----- 2A IMPLEMENT GAMEPAD CONTROLS -----#	
 
-	command = np.array([throttle_axis, steering_axis])
+
+
+
+
+
+	command = np.array()
 	return command
     #----------------------------------------#
 
@@ -73,11 +68,11 @@ try:
 		croppedRGB = myCam.imageData[524:674, 0:820]
 
         #---- 1 ISOLATE COLOURS WITH BINARY ----#
-		hsvBuf = cv2.cvtColor(croppedRGB, cv2.COLOR_BGR2HSV)
-		binaryImage = ImageProcessing.binary_thresholding(frame= hsvBuf,
-													lowerBounds=np.array([10, 50, 100]),
-													upperBounds=np.array([45, 255, 255]))
-		
+
+
+
+
+
         #----------------------------------------#
 
 		# Display the RGB (Original) as well as the Binary in 1/4th resolution for speed
@@ -87,12 +82,11 @@ try:
 
 
         #---- 3a CALCULATE STEERING CONTROL ----#
-		
-		slope, intercept = ImageProcessing.find_slope_intercept_from_binary(binary=binaryImage)
 
-		rawSteering = 1.5*(slope - 0.3419) + (1/150)*(intercept+5)
-		steering = steeringFilter.send((np.clip(rawSteering, -0.5, 0.5), dt))
-		
+
+
+
+
         #----------------------------------------#
 
 		# Write steering to qcar
@@ -101,18 +95,20 @@ try:
 		
     
         #------ 2b,3b INITIALIZE QCAR COMMAND ------#
-		if gpad.buttonX == 1:
-			if math.isnan(steering):
-				QCarCommand[1] = 0
-			else:
-				QCarCommand[1] = steering
-			QCarCommand[0] = QCarCommand[0]*np.cos(steering)
+
+
+
+
+
+
 		#-----------------------------------------#
 
 
         #-------- 2c WRITE MOTOR COMMAND --------#
-		LEDs = np.array([0, 0, 0, 0, 0, 0, 1, 1])
-		myCar.read_write_std(QCarCommand[0],QCarCommand[1],LEDs)
+
+
+
+
 		#----------------------------------------#
 		
 		cv2.waitKey(1)
