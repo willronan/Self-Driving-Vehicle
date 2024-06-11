@@ -64,7 +64,7 @@ class ImageInterpretation():
         self.SimulationTime = 15
 
 
-    # function to calculate intrinsic lense parameters / distortion
+    # function to calculate intrinsic lens parameters / distortion
     def camera_calibration(self):
 
         # saving images
@@ -101,11 +101,11 @@ class ImageInterpretation():
                 if imageCount == self.NUMBER_IMAGES:
                     print("Implement calibration for CSI camera images: ")
 
-                    # Initialize Matrices for lense properties
+                    # Initialize Matrices for lens properties
                     self.CSICamIntrinsics = np.eye(3, 3, dtype=np.float32)
                     self.CSIDistParam = np.ones((1, 5), dtype=np.float32)
 
-                    #----- 1a PEFORM LENSE CALCUATION -----#
+                    #----- 1a PEFORM LENS CALCUATION -----#
 
 
 
