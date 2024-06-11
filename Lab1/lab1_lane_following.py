@@ -44,14 +44,14 @@ gpad  = LogitechF710()
 
 
 def control_from_gamepad(LB, RT, leftLateral, A):
-    #----- 2A IMPLEMENT GAMEPAD CONTROLS -----#	
+    #----- 2.1 IMPLEMENT GAMEPAD CONTROLS -----#	
 
 
 
 
 
 
-	command = np.array()
+	command = np.array()  #np.array(throttle, steering)
 	return command
     #----------------------------------------#
 
@@ -67,21 +67,20 @@ try:
 		# Crop out a piece of the RGB to improve performance
 		croppedRGB = myCam.imageData[524:674, 0:820]
 
+
         #---- 1 ISOLATE COLOURS WITH BINARY ----#
-
-
 
 
 
         #----------------------------------------#
 
 		# Display the RGB (Original) as well as the Binary in 1/4th resolution for speed
-		cv2.imshow('My RGB image', cv2.resize(myCam.image_data, (410, 205) ) )
-		# cv2.imshow('My RGB image', cropped_rgb )
-		cv2.imshow('My Binary image', cv2.resize(binaryImage, (410, 75) ))
+		#cv2.imshow('My RGB image', cv2.resize(croppedRGB, (410, 205) ) )
+		cv2.imshow('My RGB image', myCam.imageData)
+		#cv2.imshow('My Binary image', cv2.resize(binaryImage, (410, 75) ))
 
 
-        #---- 3a CALCULATE STEERING CONTROL ----#
+        #---- 3.1 CALCULATE STEERING CONTROL ----#
 
 
 
@@ -89,12 +88,12 @@ try:
 
         #----------------------------------------#
 
-		# Write steering to qcar
-		new = gpad.read()
-		QCarCommand = control_from_gamepad(gpad.buttonLeft, gpad.trigger, gpad.leftJoystickX, gpad.buttonA)
+		# Uncomment for part 2: Write steering to qcar
+		#new = gpad.read()
+		#QCarCommand = control_from_gamepad(gpad.buttonLeft, gpad.trigger, gpad.leftJoystickX, gpad.buttonA)
 		
     
-        #------ 2b,3b INITIALIZE QCAR COMMAND ------#
+        #------ 3.2 INITIALIZE QCAR COMMAND ------#
 
 
 
@@ -104,7 +103,7 @@ try:
 		#-----------------------------------------#
 
 
-        #-------- 2c WRITE MOTOR COMMAND --------#
+        #-------- 2.2 WRITE MOTOR COMMAND --------#
 
 
 

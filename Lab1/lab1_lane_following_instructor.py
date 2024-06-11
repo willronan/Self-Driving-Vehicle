@@ -44,13 +44,13 @@ gpad  = LogitechF710()
 
 
 def control_from_gamepad(LB, RT, leftLateral, A):
-    #----- 2. IMPLEMENT GAMEPAD CONTROLS -----#	
+    #----- 2.1 IMPLEMENT GAMEPAD CONTROLS -----#	
 	if LB == 1:
 			if A == 1 :
-				throttle_axis = -0.3 * RT #going backward
+				throttle_axis = -0.1 * RT #going backward
 				steering_axis = leftLateral * 0.5
 			else:
-				throttle_axis = 0.3 * RT #going forward
+				throttle_axis = 0.1 * RT #going forward
 				steering_axis = leftLateral * 0.5
 	else:
 		throttle_axis = 0
@@ -81,12 +81,12 @@ try:
         #----------------------------------------#
 
 		# Display the RGB (Original) as well as the Binary in 1/4th resolution for speed
-		cv2.imshow('My RGB image', cv2.resize(myCam.image_data, (410, 205) ) )
-		# cv2.imshow('My RGB image', cropped_rgb )
+		cv2.imshow('My RGB image', cv2.resize(croppedRGB, (410, 205) ) )
+		#cv2.imshow('My RGB image', myCam.imageData)
 		cv2.imshow('My Binary image', cv2.resize(binaryImage, (410, 75) ))
 
 
-        #---- 3a CALCULATE STEERING CONTROL ----#
+        #---- 3.1 CALCULATE STEERING CONTROL ----#
 		
 		slope, intercept = ImageProcessing.find_slope_intercept_from_binary(binary=binaryImage)
 
@@ -100,7 +100,7 @@ try:
 		QCarCommand = control_from_gamepad(gpad.buttonLeft, gpad.trigger, gpad.leftJoystickX, gpad.buttonA)
 		
     
-        #------ 2b,3b INITIALIZE QCAR COMMAND ------#
+        #------ 3.2 INITIALIZE QCAR COMMAND ------#
 		if gpad.buttonX == 1:
 			if math.isnan(steering):
 				QCarCommand[1] = 0
@@ -110,7 +110,7 @@ try:
 		#-----------------------------------------#
 
 
-        #-------- 2c WRITE MOTOR COMMAND --------#
+        #-------- 2.2 WRITE MOTOR COMMAND --------#
 		LEDs = np.array([0, 0, 0, 0, 0, 0, 1, 1])
 		myCar.read_write_std(QCarCommand[0],QCarCommand[1],LEDs)
 		#----------------------------------------#
