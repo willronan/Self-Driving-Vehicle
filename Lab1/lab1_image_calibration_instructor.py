@@ -20,13 +20,13 @@ class ImageInterpretation():
         self.NUMBER_IMAGES = 15
 
         # List of variables given by students
-        self.imageSize      = [820,410]
-        self.chessboardDim  = [7,9]
-        self.frameRate      = 30
-        self.boxSize        = 0.2
+        self.imageSize      = [820,410]      # pixel width & height of images
+        self.chessboardDim  = [7,9]          # dimenstions of the checkerboard calibration imagage
+        self.frameRate      = 30             # frame rate for the camera
+        self.boxSize        = 0.02           # width of the boxes on checkerboard image
         self.sampleRate     = 1/self.frameRate
-        self.calibFinished  = False
-        streamInfo=[3, "RGB"]
+        self.calibFinished  = False          # boolean to signify when calibration is complete
+        streamInfo=[3, "RGB"]                # CSI camera 3 (front), in RGB mode
 
         # List of camera intrinsic properties :
         self.CSICamIntrinsics = np.eye(3, 3, dtype=np.float32)
@@ -99,13 +99,12 @@ class ImageInterpretation():
                 savedImages.append(grayImage)
 
                 if imageCount == self.NUMBER_IMAGES:
-                    print("Implement calibration for CSI camera images: ")
 
                     # Initialize Matrices for lens properties
                     self.CSICamIntrinsics = np.eye(3, 3, dtype=np.float32)
                     self.CSIDistParam = np.ones((1, 5), dtype=np.float32)
 
-                    #----- 1a PEFORM LENS CALCUATION -----#
+                    #----- 1.1 PEFORM LENS CALCUATION -----#
 
                     self.CSICamIntrinsics, self.CSIDistParam = \
                         self.camCalibTool.calibrate_camera(
@@ -152,9 +151,8 @@ class ImageInterpretation():
 
 
 
-            #--------- 2. CALIBRATE IMAGE ---------#
+            #--------- 2.1 CALIBRATE IMAGE ---------#
 
-            print("Implement image correction for raw camera image... ")
             undistortedImage = image
       
             imageShape = np.shape(image)
@@ -164,34 +162,30 @@ class ImageInterpretation():
                 cameraDistortion
             )
             #----------------------------------------#
-            #----- 3a PERFORM CANNY FILTERATION -----#
-
+            #----- 2.2 PERFORM CANNY FILTERATION -----#
 
             filteredImage = self.camCalibTool.do_canny(undistortedImage)
 
-
             #----------------------------------------#
-            #----- 3b PERFORM CANNY FILTERATION -----#
-
+            #---------- 2.3 Extract Lines ----------#
 
             linesImage, lines = self.camCalibTool.extract_lines(
                 filteredImage,
                 undistortedImage
             )
-
             
             #----------------------------------------#
 
 
             imageDisplayed = image
 
-            #Uncomment for Step 2
-            #imageDisplayed = undistortedImage
+            #Uncomment for Step 2.1
+            #mageDisplayed = undistortedImage
 
-            #Uncomment for Step 3a
+            #Uncomment for Step 2.2
             #imageDisplayed = filteredImage
 
-            #Uncomment for Step 3b
+            #Uncomment for Step 2.3
             imageDisplayed = linesImage
             
 

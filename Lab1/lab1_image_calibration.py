@@ -20,25 +20,17 @@ class ImageInterpretation():
         self.NUMBER_IMAGES = 15
 
         # List of variables given by students
-        self.imageSize      = [820,410]
-        self.chessboardDim  = [7,9]
-        self.frameRate      = 30
-        self.boxSize        = 0.2
+        self.imageSize      = [820,410]      # pixel width & height of images
+        self.chessboardDim  = [7,9]          # dimenstions of the checkerboard calibration imagage
+        self.frameRate      = 30             # frame rate for the camera
+        self.boxSize        = 0.02           # width of the boxes on checkerboard image
         self.sampleRate     = 1/self.frameRate
-        self.calibFinished  = False
-        streamInfo=[3, "RGB"]
+        self.calibFinished  = False          # boolean to signify when calibration is complete
+        streamInfo=[3, "RGB"]                # CSI camera 3 (front), in RGB mode
 
         # List of camera intrinsic properties :
         self.CSICamIntrinsics = np.eye(3, 3, dtype=np.float32)
-        # CSI camera intrinsic matrix at resolution [820, 410] is:
-        # [[318.86    0.00  401.34]
-        #  [  0.00  312.14  201.50]
-        #  [  0.00    0.00    1.00]]
-
-
         self.CSIDistParam = np.ones((1,5),dtype= np.float32)
-        # CSI camera distorion paramters at resolution [820, 410] are:
-        # [[-0.9033  1.5314 -0.0173 0.0080 -1.1659]]
 
         # Final Image streamed by CSI
         self.streaCSI = np.zeros((self.imageSize[0],self.imageSize[1]))
@@ -99,13 +91,12 @@ class ImageInterpretation():
                 savedImages.append(grayImage)
 
                 if imageCount == self.NUMBER_IMAGES:
-                    print("Implement calibration for CSI camera images: ")
 
                     # Initialize Matrices for lens properties
                     self.CSICamIntrinsics = np.eye(3, 3, dtype=np.float32)
                     self.CSIDistParam = np.ones((1, 5), dtype=np.float32)
 
-                    #----- 1a PEFORM LENS CALCUATION -----#
+                    #----- 1.1 PEFORM LENS CALCUATION -----#
 
 
 
@@ -151,21 +142,19 @@ class ImageInterpretation():
 
 
 
-            #--------- 2. CALIBRATE IMAGE ---------#
-
-
-
-
-
-            #----------------------------------------#
-            #----- 3a PERFORM CANNY FILTERATION -----#
-
+            #--------- 2.1 CALIBRATE IMAGE ---------#
 
 
 
 
             #----------------------------------------#
-            #----- 3b PERFORM CANNY FILTERATION -----#
+            #----- 2.2 PERFORM CANNY FILTERATION -----#
+
+
+
+
+            #----------------------------------------#
+            #---------- 2.3 Extract Lines ----------#
 
 
 
@@ -175,13 +164,13 @@ class ImageInterpretation():
 
             imageDisplayed = image
 
-            #Uncomment for Step 2
+            #Uncomment for Step 2.1
             #imageDisplayed = undistortedImage
 
-            #Uncomment for Step 3a
+            #Uncomment for Step 2.2
             #imageDisplayed = filteredImage
 
-            #Uncomment for Step 3b
+            #Uncomment for Step 2.3
             #imageDisplayed = linesImage
             
 
