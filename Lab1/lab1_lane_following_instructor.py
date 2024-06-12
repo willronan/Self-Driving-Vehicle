@@ -33,6 +33,9 @@ steeringFilter = Filter().low_pass_first_order_variable(25, 0.033)
 next(steeringFilter)
 dt = 0.033
 
+#Command Coefficients
+STEERING_COEF = 0.5
+THROTTLE_COEF = 0.075
 
 ## Initialize the CSI cameras
 myCam = Camera2D(cameraId=cameraID, frameWidth=imageWidth, frameHeight=imageHeight, frameRate=sampleRate)
@@ -47,11 +50,11 @@ def control_from_gamepad(LB, RT, leftLateral, A):
     #----- 2.1 IMPLEMENT GAMEPAD CONTROLS -----#	
 	if LB == 1:
 			if A == 1 :
-				throttle_axis = -0.1 * RT #going backward
-				steering_axis = leftLateral * 0.5
+				throttle_axis = -THROTTLE_COEF * RT #going backward
+				steering_axis = leftLateral * STEERING_COEF
 			else:
-				throttle_axis = 0.1 * RT #going forward
-				steering_axis = leftLateral * 0.5
+				throttle_axis = THROTTLE_COEF * RT #going forward
+				steering_axis = leftLateral * STEERING_COEF
 	else:
 		throttle_axis = 0
 		steering_axis = 0

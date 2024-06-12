@@ -33,6 +33,9 @@ steeringFilter = Filter().low_pass_first_order_variable(25, 0.033)
 next(steeringFilter)
 dt = 0.033
 
+#Command Coefficients
+STEERING_COEF = 0.5
+THROTTLE_COEF = 0.075
 
 ## Initialize the CSI cameras
 myCam = Camera2D(cameraId=cameraID, frameWidth=imageWidth, frameHeight=imageHeight, frameRate=sampleRate)
