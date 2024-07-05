@@ -22,7 +22,7 @@ with QCarRealSense('''              ''') as myCam:
     while time.time() - t0 < runTime:
 
 
-        #------ 1.1 TEST REALSENSE CAMERA ------#
+        #------ 1 TEST REALSENSE CAMERA -------#
 
 
 

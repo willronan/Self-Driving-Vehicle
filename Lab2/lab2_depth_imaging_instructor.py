@@ -22,12 +22,10 @@ with QCarRealSense(mode='RGB, Depth') as myCam:
     while time.time() - t0 < runTime:
 
 
-        #----- 1.1 PEFORM LENS CALCUATION -----#
-        myCam.read_RGB()
-        cv2.imshow('My RGB', myCam.imageBufferRGB)
+        #------ 1 PEFORM LENS CALCUATION ------#
         
-        #yCam.read_depth()
-        #cv2.imshow('My Depth', myCam.imageBufferDepthPX/max_distance)
+        myCam.read_depth()
+        cv2.imshow('My Depth', myCam.imageBufferDepthPX/max_distance)
 
 
         #myCam.read_IR()
