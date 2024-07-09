@@ -63,6 +63,7 @@ def control_from_gamepad(LB, RT, leftLateral, A):
 	return command
     #----------------------------------------#
 
+kernel = np.ones((5, 5), np.uint8) 
 
 # -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 ## Main Loop
@@ -78,8 +79,11 @@ try:
         #---- 1 ISOLATE COLOURS WITH BINARY ----#
 		hsvBuf = cv2.cvtColor(croppedRGB, cv2.COLOR_BGR2HSV)
 		binaryImage = ImageProcessing.binary_thresholding(frame= hsvBuf,
-													lowerBounds=np.array([10, 50, 100]),
-													upperBounds=np.array([45, 255, 255]))
+													lowerBounds=np.array([10, 45, 80]),
+													upperBounds=np.array([40, 255, 255]))
+		
+
+		binaryImage= cv2.erode(binaryImage, kernel, iterations=1)  
 		
         #----------------------------------------#
 
