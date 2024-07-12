@@ -35,7 +35,7 @@ dt = 0.033
 
 #Command Coefficients
 STEERING_COEF = 0.5
-THROTTLE_COEF = 0.075
+THROTTLE_COEF = 0.1
 
 ## Initialize the CSI cameras
 myCam = Camera2D(cameraId=cameraID, frameWidth=imageWidth, frameHeight=imageHeight, frameRate=sampleRate)
@@ -63,7 +63,8 @@ def control_from_gamepad(LB, RT, leftLateral, A):
 	return command
     #----------------------------------------#
 
-kernel = np.ones((5, 5), np.uint8) 
+
+touch = 0
 
 # -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 ## Main Loop
@@ -72,6 +73,7 @@ try:
 		start = time.time()
 		# Capture RGB Image from CSI
 		myCam.read()
+
 		
 		# Crop out a piece of the RGB to improve performance
 		croppedRGB = myCam.imageData[524:674, 0:820]
@@ -79,18 +81,18 @@ try:
         #---- 1 ISOLATE COLOURS WITH BINARY ----#
 		hsvBuf = cv2.cvtColor(croppedRGB, cv2.COLOR_BGR2HSV)
 		binaryImage = ImageProcessing.binary_thresholding(frame= hsvBuf,
-													lowerBounds=np.array([10, 45, 80]),
-													upperBounds=np.array([40, 255, 255]))
+													lowerBounds=np.array([10, 55, 80]),
+													upperBounds=np.array([40, 255, 200]))
 		
 
-		binaryImage= cv2.erode(binaryImage, kernel, iterations=1)  
 		
         #----------------------------------------#
 
 		# Display the RGB (Original) as well as the Binary in 1/4th resolution for speed
-		cv2.imshow('My RGB image', cv2.resize(croppedRGB, (410, 205) ) )
-		#cv2.imshow('My RGB image', myCam.imageData)
+		cv2.imshow('crop rgB image', cv2.resize(croppedRGB, (410, 205) ) )
 		cv2.imshow('My Binary image', cv2.resize(binaryImage, (410, 75) ))
+
+		
 
 
         #---- 3.1 CALCULATE STEERING CONTROL ----#
@@ -100,6 +102,12 @@ try:
 		rawSteering = 1.5*(slope - 0.3419) + (1/150)*(intercept+5)
 		steering = steeringFilter.send((np.clip(rawSteering, -0.5, 0.5), dt))
 		
+		if steering > 2 or steering < -2:
+			steeringFilter = Filter().low_pass_first_order_variable(25, 0.033)
+			next(steeringFilter)
+			touch = 1
+
+		print(steering)
         #----------------------------------------#
 
 		# Write steering to qcar
@@ -130,6 +138,7 @@ try:
 
 except KeyboardInterrupt:
 	print("User interrupted!")
+	print(touch)
 
 finally:
 	# Terminate camera and QCar
