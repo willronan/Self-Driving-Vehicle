@@ -1,3 +1,13 @@
+'''lab2_segmentation.py
+
+In this walk through, students will
+create a preprocessing algorithm to reduce
+the realsense camera feed to the information
+necassary to detect stop and yeild signs.
+Using edge detection, signs will be identified 
+and proper feedback will be displayed
+'''
+
 from pal.utilities.vision import Camera3D
 
 import numpy as np

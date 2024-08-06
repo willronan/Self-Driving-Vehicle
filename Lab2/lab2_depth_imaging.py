@@ -1,6 +1,6 @@
 '''lab2_depth_imaging.py
 
-This walkthrough is to get used to interfacing 
+This walkthrough is designed to practice interfacing 
 with the intelrealsense camera and test out its different modes
 
 '''
