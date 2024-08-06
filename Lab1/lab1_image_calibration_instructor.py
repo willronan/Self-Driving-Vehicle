@@ -112,7 +112,7 @@ class ImageInterpretation():
                             self.chessboardDim,
                             self.boxSize)
                     
-                    #----------------------------------------#
+                    #--------------------------------------#
 
                     # Printed output for students
                     text = "CSI camera intrinsic matrix at resolution {} is:"
