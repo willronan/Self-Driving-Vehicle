@@ -25,53 +25,40 @@ imageWidth = 1280
 imageHeight = 720
 
 
-# Calculate area of detection bounding box
-
-
-#----- 1.3 CALCULATE BOUNDING AREA -----#
-
-def obj_area(left, right, top, bottom):
-    pass    # eliminates error message
-
-#----------------------------------------#
-
-
-# Termination procedure
-
 def detect_signs():
+    display = None  # Initialize display to None
+
     try:
-
         try:
-            camera = Camera3D(mode='RGB&DEPTH', frameWidthRGB=imageWidth, frameHeightRGB=imageHeight)
-            display = videoOutput("display://0")
 
-            # detection model
-            # net = detectNet("ssd-mobilenet-v2", threshold=0.25)
+            #------ 1.1 CONVERT TO CUDA IMAGE ------#
+
+
+
+            pass # <=== clears empty try block error, can be deleted
+
+            #----------------------------------------#
 
         except Exception as e:
             print(f"Failed to initialize components: {e}")
-            camera.terminate()
-            display.Close()
+            if camera:
+                camera.terminate()
+            if display:
+                display.Close()
             sys.exit(1)
 
         while True:
-
-            # Resest with ever iteration
-            sign_detected = False
+            # Reset with every iteration
             os.system('clear')
 
             try:
-
                 # Read camera data
                 camera.read_RGB()
                 img = camera.imageBufferRGB
 
-
-                cudaImg = img
-
                 # Preprocess image
 
-                #------ 1.1 CONVERT TO CUDA IMAGE ------#
+                #------ 1.2 CONVERT TO CUDA IMAGE ------#
 
 
 
@@ -83,9 +70,7 @@ def detect_signs():
                 if cudaImg is None:  # capture timeout
                     continue
 
-                
-
-                #----- 1.2 PERFORM OBJECT DETECTION -----#
+                #----- 1.3 PERFORM OBJECT DETECTION -----#
 
 
 
@@ -95,11 +80,11 @@ def detect_signs():
 
                 #----------------------------------------#
 
-                display.Render(cudaImg)
-                display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
+                if display:
+                    display.Render(cudaImg)
+                    display.SetStatus("Object Detection | Network {:.0f} FPS".format(net.GetNetworkFPS()))
 
                 time.sleep(0.1)
-                
 
             except Exception as e:
                 print(f"Error during processing: {e}")
@@ -109,9 +94,12 @@ def detect_signs():
         print(f"Failed to initialize components: {e}")
 
     finally:
-        camera.terminate()
-        display.Close()
+        if camera:
+            camera.terminate()
+        if display:
+            display.Close()
         sys.exit(0)
+
 
 
 
