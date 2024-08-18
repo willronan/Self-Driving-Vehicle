@@ -46,7 +46,8 @@ class Motor(Node):
         self.stop_flag = False
         self.ignore_flag = False
         self.ignore_timer = 0
-        self.danger_flag = False
+        self.front_obstacle_flag = False
+        self.rear_obstacle_flag = False
 
 
     # Handle sign detection
@@ -66,24 +67,42 @@ class Motor(Node):
     def lidar_callback(self, msg):
 
         print(f"Lidar says {msg.data}")
-        if msg.data == "Danger":
-            self.danger_flag = True
-            self.get_logger().info('Danger!')
-        elif msg.data == "Safe":
-            self.danger_flag = False
-            self.get_logger().info('Safe to proceed')
+        if msg.data == "Front&Rear":
+            self.front_obstacle_flag = True
+            self.rear_obstacle_flag = True
+        elif msg.data == "Front":
+            self.front_obstacle_flag = True
+        elif msg.data == "Rear":
+            self.rear_obstacle_flag = True
+        elif msg.data == "None":
+            self.front_obstacle_flag = False
+            self.rear_obstacle_flag = False
+    
 
     # Handle steering/motor command
     def steering_callback(self, msg):
 
-        if self.stop_flag == False and self.danger_flag == False:
+        # No stop sign / already waited, ignoring stop sign
+        if self.stop_flag == False:
+            # If stop sign is being ignored, stop ignoring after 3 s
             if self.ignore_flag == True:
                 if time.time() - self.ignore_timer > 3:
                     self.ignore_flag = False
-            self.car.read_write_std(msg.throttle, msg.steer, self.LEDs)
-            self.get_logger().info('Motor controls processed')
+            # If the command is forwards, and there is no front obstacle, go forwards
+            if msg.throttle > 0 and not self.front_obstacle_flag:
+                self.car.read_write_std(msg.throttle, msg.steer, self.LEDs)
+            # If the command is backwards, and there is no rear obstacle, go backwards
+            elif msg.throttle < 0 and not self.rear_obstacle_flag:
+                self.car.read_write_std(msg.throttle, msg.steer, self.LEDs)
+            # Otherwise stop
+            else:
+                self.car.read_write_std(0, msg.steer, self.LEDs)
+                
+        # If there is a stop sign
         else:
+            # Stop
             self.car.read_write_std(0, 0, self.LEDs)
+            # Wait 3 s, then continue, ignorin the stop sign 
             if self.stop_flag == True:
                 time.sleep(3)
                 self.ignore_flag = True
