@@ -42,19 +42,26 @@ class RPLidar(Node):
 
     def __init__(self):
 
-        #------ 1.1.1 INITIALIZE LIDAR NODE ------#
+        #------ 2.1.1 INITIALIZE LIDAR NODE ------#
 
         super().__init__('lidar')
 
-        # Create publisher & set LiDAR parameters
+        # Create publisher 
         self.publisher_ = self.create_publisher(String, 'lidar', 10)
+
+
         self.numMeasurements 	     = 360	# Points
-        self.lidarMeasurementMode 	 = 2
-        self.lidarInterpolationMode  = 0
-        self.danger_zones = [
-            ((-0.1, 0.1), (0.1, 0.6)),    # <=== objects in front of the vehicle
-            ((-0.1, -0.5), (0.1, -0.1))   # <=== objects behind the vehicle
-        ]
+        self.lidarMeasurementMode 	 = 2    # Long range mode
+        self.lidarInterpolationMode  = 0    # No interpolation
+
+        # Connect to LiDAR sensor
+        self.lidar = Lidar(
+            type='RPLidar',
+            numMeasurements=self.numMeasurements,
+            rangingDistanceMode=self.lidarMeasurementMode,
+            interpolationMode=self.lidarInterpolationMode
+        )
+
 
         # Connect to LiDAR sensor
         self.lidar = Lidar(
@@ -75,8 +82,8 @@ class RPLidar(Node):
     # check if any detected object is a hazard
     def check_danger_zones(self, obstacles):
 
-        #-------- 1.4 CHECK DANGER ZONES --------#
-        
+        os.system("clear")
+
         # Coordinates of danger zones
         front_x_min, front_y_min = self.danger_zones[0][0]
         front_x_max, front_y_max = self.danger_zones[0][1]
@@ -86,15 +93,18 @@ class RPLidar(Node):
         # Flags for obstacle detections
         in_danger_zone = [False, False]
 
+        #-------- 2.4 CHECK DANGER ZONES --------#
         # Check if any detection is in a danger zone
-        for detection in obstacles:
-            x = detection["cluster"][:, 0]
-            y = detection["cluster"][:, 1]
+        for obstacle in obstacles:
+            x = obstacle["cluster"][:, 0]
+            y = obstacle["cluster"][:, 1]
 
             if np.any((front_x_min <= x) & (x <= front_x_max) & (front_y_min <= y) & (y <= front_y_max)):
                 in_danger_zone[0] = True
             if np.any((rear_x_min <= x) & (x <= rear_x_max) & (rear_y_min <= y) & (y <= rear_y_max)):
                 in_danger_zone[1] = True
+
+        #----------------------------------------#
 
         # Return corresponding warning code
         if in_danger_zone[0] and in_danger_zone[1]:
@@ -110,20 +120,20 @@ class RPLidar(Node):
             print("None")
             return Obstical.NONE
         
-       
-
 
 
     def detect_obstacles(self):
         try:
+
+
+            fig, ax = plt.subplots()
+            plt.show(block=False)
+
+
             while True:
 
                 
-                #---------- 1.2 SCAN & PLOT ----------#
-
-
-                fig, ax = plt.subplots()
-                plt.show(block=False)
+             #---------- 2.2 SCAN & PLOT ----------#
 
 
                 # Preprocess data
@@ -137,21 +147,22 @@ class RPLidar(Node):
                 data = np.vstack((x, y)).T
 
 
-                #--------- 1.2 LOCATE CLUSTERS ---------#
+                #--------- 2.3 LOCATE CLUSTERS ---------#
 
                 # Apply clustering algorithm
                 db = DBSCAN(eps=0.2, min_samples=5).fit(data)  # Adjust eps and min_samples as needed
                 labels = db.labels_
                 unique_labels = set(labels) - {-1}
 
-                # Reset for each scan
-                os.system("clear")
+                
 
                 # List to store relevant clusters
                 obstacles = []
 
                 # Process data
                 for label in unique_labels:
+
+
                     # Group data point clusters 
                     cluster_indices = np.where(labels == label)
                     cluster = data[cluster_indices]
@@ -160,7 +171,7 @@ class RPLidar(Node):
                     cluster_distances = distances[cluster_indices]
                     cluster_distance = np.mean(cluster_distances)
 
-                    if cluster_distance < 2 and cluster_distance > 0.5:
+                    if cluster_distance < 2 and cluster_distance > 0.05:
                         obstacles.append({
                             "cluster": cluster,
                             "distance": cluster_distance,
@@ -173,7 +184,7 @@ class RPLidar(Node):
                 obstical_detection = self.check_danger_zones(obstacles)
 
 
-                #--------- 1.2 PUBLISH WARNING ---------#
+                #--------- 2.5 PUBLISH WARNING ---------#
                 msg = String()
                 if obstical_detection == Obstical.FRONT_AND_REAR:
                     msg.data = "Front&Rear"
@@ -196,21 +207,24 @@ class RPLidar(Node):
 
                 #----------------------------------------#
 
+
                 # Plot data
                 ax.clear()  # Clear the previous plot
+                
                 ax.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
+
                 ax.set_xlabel('X')
                 ax.set_ylabel('Y')
                 ax.set_title('Lidar Data Clustering')
 
                 # Add an arrow to indicate vehicle position and direction
-                arrowprops = dict(facecolor='red', shrink=0.05, width=1.0, headwidth=3.0)
+                arrowprops = dict(facecolor='red', shrink=0.05, width=1.0, headwidth=2.0)
                 ax.annotate('', xy=(0, 1), xytext=(0, 0), arrowprops=arrowprops)
 
                 plt.draw()
                 plt.pause(0.01)
 
-                #----------------------------------------#
+             #----------------------------------------#
 
 
         except Exception as e:
@@ -234,7 +248,7 @@ class RPLidar(Node):
         self.lidar.terminate()  # Properly terminate QCar instance
         super().destroy_node()
 
-#------ 1.1.2 SETUP ROS PIPELINE ------#
+#------ 2.1.2 SETUP ROS PIPELINE ------#
 
 def main(args=None):
 
