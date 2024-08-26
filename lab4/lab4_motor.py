@@ -40,27 +40,17 @@ class Motor(Node):
         self.car = QCar()
 
         # Flags and counters
-        self.stop_flag = False
-        self.ignore_flag = False
-        self.ignore_timer = 0
-        self.front_obstacle_flag = False
-        self.rear_obstacle_flag = False
-
+        self.arrivedFlag = False
 
     # Handle lidar detections
     def lidar_callback(self, msg):
 
-        print(f"Lidar says {msg.data}")
-        if msg.data == "Front&Rear":
-            self.front_obstacle_flag = True
-            self.rear_obstacle_flag = True
-        elif msg.data == "Front":
-            self.front_obstacle_flag = True
-        elif msg.data == "Rear":
-            self.rear_obstacle_flag = True
-        elif msg.data == "None":
-            self.front_obstacle_flag = False
-            self.rear_obstacle_flag = False
+        #--- DEFINEE LIDAR CALLBACK FUNCTION ---#
+
+
+        pass
+        #----------------------------------------#
+        
     
 
     # Handle steering/motor command
@@ -68,14 +58,12 @@ class Motor(Node):
 
         throttle, steer = map(float, msg.data.split(','))
 
-        #---------- 3 HANDLE WARNINGS ----------#
+        print(msg.data)
+
+        # If the car is not in the rendezvous accept drive commands
+        self.car.read_write_std(throttle, steer, self.LEDs)
 
 
-
-
-
-
-        #----------------------------------------#
             
 
     # Safely disconnect hardware
