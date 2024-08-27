@@ -54,7 +54,7 @@ class RPLidarKMeans(Node):
         self.fig, self.ax = plt.subplots()
         plt.show(block=False)
 
-        self.detect_obstacles()
+        self.detect_rendezvous()
 
 
     # Remove unwanted datapoints 
@@ -122,7 +122,7 @@ class RPLidarKMeans(Node):
 
 
     # Use the LiDAR sensor to create mapping and perform KMeans and rendezvous check
-    def detect_obstacles(self):
+    def detect_rendezvous(self):
         try:
             x_min, x_max = -2.0, 2.0
             y_min, y_max = -2.0, 2.0
@@ -142,11 +142,12 @@ class RPLidarKMeans(Node):
                     self.get_logger().warn("No data points received from LiDAR.")
                     continue
 
-                try:
-                    filtered_data = self.filter_data(data)
-                except ValueError as e:
-                    self.get_logger().warn(f"Filtering error: {e}")
-                    continue
+                if len(data) == 0:  
+                    raise ValueError("Data cannot be empty. Please provide valid data.")
+
+
+                filtered_data = self.filter_data(data)
+
 
                 try:
                     labels, centroids = self.cluster_and_find_centroids(filtered_data, k=4)

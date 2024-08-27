@@ -54,11 +54,9 @@ class RPLidarKMeans(Node):
         self.fig, self.ax = plt.subplots()
         plt.show(block=False)
 
-        self.detect_obstacles()
+        self.detect_rendezvous()
 
-    #-- DETECT OBSTACLES AND PREDICT ANGLE --#
-
-
+    #-- DETECT RENDEZVOUS WITH RESPECT TO CAR --#
 
 
 
@@ -71,7 +69,9 @@ class RPLidarKMeans(Node):
 
 
 
-    #----------------------------------------#
+
+
+    #--------------------------------------------#
 
     # Handle system exits
     def signal_handler(self, sig, frame):
