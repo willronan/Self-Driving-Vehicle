@@ -45,13 +45,12 @@ class Motor(Node):
     # Handle lidar detections
     def lidar_callback(self, msg):
 
-        #--- DEFINEE LIDAR CALLBACK FUNCTION ---#
+        #-- SET LEDS ACCORDING TO RENDEZVOUS STATUS --#
 
 
         pass
-        #----------------------------------------#
+        #---------------------------------------------#
         
-    
 
     # Handle steering/motor command
     def steering_callback(self, msg):
@@ -64,7 +63,6 @@ class Motor(Node):
         self.car.read_write_std(throttle, steer, self.LEDs)
 
 
-            
 
     # Safely disconnect hardware
     def destroy(self):

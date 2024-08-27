@@ -56,8 +56,9 @@ class RPLidarKMeans(Node):
 
         self.detect_obstacles()
 
-    def filter_data(self, data, min_distance=0.05, max_distance=0.8):
 
+    # Remove unwanted datapoints 
+    def filter_data(self, data, min_distance=0.05, max_distance=0.8):
         
         if data.shape[0] == 0:
             raise ValueError("No data points available to filter.")
@@ -70,9 +71,9 @@ class RPLidarKMeans(Node):
             raise ValueError("No data points left after filtering.")
 
         return filtered_data
-
+    
+    # Perform kmeans clustering and return the data
     def cluster_and_find_centroids(self, data, k=4):
-
         
         if data.shape[0] < k:
             raise ValueError(f"Not enough data points to form {k} clusters.")
@@ -84,14 +85,16 @@ class RPLidarKMeans(Node):
             raise ValueError("Not enough clusters found to form a quadrilateral.")
 
         return kmeans.labels_, centroids
+    
 
+    # For additional graphical information, print the angle of the centroids 
     def calculate_directions(self, centroids):
         directions = np.arctan2(centroids[:, 1], centroids[:, 0])  # Angle in radians
         return np.degrees(directions)  # Convert to degrees
     
 
 
-
+    # Uses a convex hull to see if the origin is within the scanned quadrilateral   
     def check_rendezvous(self, centroids):
         # Check if there are fewer than 3 points
         if len(centroids) < 3:
@@ -118,7 +121,7 @@ class RPLidarKMeans(Node):
         
 
 
-
+    # Use the LiDAR sensor to create mapping and perform KMeans and rendezvous check
     def detect_obstacles(self):
         try:
             x_min, x_max = -2.0, 2.0
@@ -170,9 +173,6 @@ class RPLidarKMeans(Node):
                 for centroid, direction in zip(centroids, directions):
                     self.ax.annotate(f'{direction:.1f}°', xy=centroid, textcoords='offset points', xytext=(0, 10), ha='center')
 
-
-                
-
                 self.ax.set_xlim(x_min, x_max)
                 self.ax.set_ylim(y_min, y_max)
                 self.ax.set_aspect('equal')
@@ -191,16 +191,18 @@ class RPLidarKMeans(Node):
         finally:
             self.lidar.terminate()
 
+    # Handle system exits
     def signal_handler(self, sig, frame):
         self.get_logger().info("Exiting gracefully...")
         self.destroy()
         sys.exit(0)
 
+    # Terminate hardware processes
     def destroy(self):
         self.lidar.terminate()
         super().destroy_node()
 
-
+# ROS pipeline
 def main(args=None):
     rclpy.init(args=args)
     rplidar_kmeans = RPLidarKMeans()

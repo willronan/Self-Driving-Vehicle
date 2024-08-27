@@ -51,8 +51,6 @@ class Motor(Node):
             self.LEDs = np.array([0, 0, 0, 0, 0, 0, 0, 0])
         
 
-    
-
     # Handle steering/motor command
     def steering_callback(self, msg):
 
@@ -61,10 +59,7 @@ class Motor(Node):
         print(msg.data)
 
         # If the car is not in the rendezvous accept drive commands
-        self.car.read_write_std(throttle, steer, self.LEDs)
-
-
-            
+        self.car.read_write_std(throttle, steer, self.LEDs)    
 
     # Safely disconnect hardware
     def destroy(self):

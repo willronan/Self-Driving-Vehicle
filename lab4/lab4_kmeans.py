@@ -63,18 +63,29 @@ class RPLidarKMeans(Node):
 
 
 
+
+
+
+
+
+
+
+
     #----------------------------------------#
 
+    # Handle system exits
     def signal_handler(self, sig, frame):
         self.get_logger().info("Exiting gracefully...")
         self.destroy()
         sys.exit(0)
 
+    # Terminate hardware processes
     def destroy(self):
         self.lidar.terminate()
         super().destroy_node()
 
 
+# ROS pipeline
 def main(args=None):
     rclpy.init(args=args)
     rplidar_kmeans = RPLidarKMeans()
