@@ -53,7 +53,7 @@ class ImageInterpretation():
         # Initialize calibration tool:
         self.camCalibTool = ImageProcessing()
 
-        self.SimulationTime = 15
+        self.SimulationTime = 30
 
 
     # function to calculate intrinsic lens parameters / distortion
@@ -98,10 +98,11 @@ class ImageInterpretation():
 
                     #----- 1.1 PEFORM LENS CALCUATION -----#
 
-
-
-
-
+                    self.CSICamIntrinsics, self.CSIDistParam = \
+                        self.camCalibTool.calibrate_camera(
+                            savedImages,
+                            self.chessboardDim,
+                            self.boxSize)
 
                     #----------------------------------------#
 
@@ -127,7 +128,7 @@ class ImageInterpretation():
         currentTime = 0
         t0 = time.time()
 
-        while (currentTime < self.SimulationTime):
+        while True:
             LoopStartTime = time.time()
             currentTime = time.time()-t0
 
@@ -140,38 +141,20 @@ class ImageInterpretation():
             cameraIntrinsics = self.CSICamIntrinsics
             cameraDistortion = self.CSIDistParam
 
-
-
-            #--------- 2.1 CALIBRATE IMAGE ---------#
-
-
-
-
-            #----------------------------------------#
-            #----- 2.2 PERFORM CANNY FILTERATION -----#
-
-
-
-
-            #----------------------------------------#
-            #---------- 2.3 Extract Lines ----------#
-
-
-
-
-            #----------------------------------------#
-
-
             imageDisplayed = image
 
-            #Uncomment for Step 2.1
+
+            undistortedImage = image
+      
+            imageShape = np.shape(image)
+            undistortedImage = self.camCalibTool.undistort_img(
+                image,
+                cameraIntrinsics,
+                cameraDistortion
+            )
+
+            # UNCOMMENT FOR STEP 2
             #imageDisplayed = undistortedImage
-
-            #Uncomment for Step 2.2
-            #imageDisplayed = filteredImage
-
-            #Uncomment for Step 2.3
-            #imageDisplayed = linesImage
             
 
             # Use cv2 to display current image
@@ -193,6 +176,7 @@ def main():
     try:
         cameraInterfacingLab = ImageInterpretation()
 
+        # UNCOMMENT FOR STEP 2
         #try:
         #    cameraInterfacingLab.camera_calibration()
         #    if cameraInterfacingLab.calibFinished:

@@ -28,6 +28,10 @@ MAX_STEERING = 0.5
 
  #------- 1. BUILD QCAR OBJECT -------#
 
+
+
+ #------------------------------------#
+
 #Main loop
 try:
     #Set starttime
