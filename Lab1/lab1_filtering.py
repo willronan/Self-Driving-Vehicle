@@ -66,13 +66,13 @@ def main():
                     image
                 )
 
-            imageDisplayed = image
+            imageDisplayed = linesImage
 
             # Use cv2 to display current image
             cv2.imshow("Final Image", imageDisplayed)
 
 
-            cv2.waitKey(0.01)
+            cv2.waitKey(1)
 
     finally:
         frontCSI.terminate()
