@@ -66,7 +66,7 @@ class RPLidar(Node):
 
         self.danger_zones = [
             ((-0.1, 0.1), (0.1, 0.7)),    # <=== objects in front of the vehicle
-            ((-0.1, -0.5), (0.1, -0.1))   # <=== objects behind the vehicle
+            ((-0.1, -0.7), (0.1, -0.1))   # <=== objects behind the vehicle
         ]
 
         #self.fig, self.ax = plt.subplots()
