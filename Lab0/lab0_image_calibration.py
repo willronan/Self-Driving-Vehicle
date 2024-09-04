@@ -1,7 +1,6 @@
-''' lab1_lane_following.py
+''' lab0_image_calibration.py
 
-This walkthrough covers the topics of camera calibration,
-feature detection, and lane following
+This walkthrough covers the topics of camera calibration
 
 '''
 
