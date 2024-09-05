@@ -5,13 +5,12 @@ for edge detection
 
 '''
 
-from pal.products.qcar import QCarCameras,QCarRealSense, IS_PHYSICAL_QCAR
+from pal.products.qcar import QCarCameras
 from hal.utilities.image_processing import ImageProcessing
 import time
 import numpy as np
 import cv2
         
-
 
 def main():
     try:
@@ -66,7 +65,7 @@ def main():
                     image
                 )
 
-            imageDisplayed = linesImage
+            imageDisplayed = image
 
             # Use cv2 to display current image
             cv2.imshow("Final Image", imageDisplayed)

@@ -12,9 +12,6 @@ import time
 from pal.products.qcar import QCar, IS_PHYSICAL_QCAR
 import os
 
-if not IS_PHYSICAL_QCAR:
-    import qlabs_setup
-    qlabs_setup.setup()
 
 
 #Sampling setup

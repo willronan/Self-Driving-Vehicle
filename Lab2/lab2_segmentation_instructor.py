@@ -8,7 +8,8 @@ Using edge detection, signs will be identified
 and proper feedback will be displayed
 '''
 
-from pal.utilities.vision import Camera3D
+from pal.products.qcar import QCarRealSense
+from pal.products.qcar import IS_PHYSICAL_QCAR
 
 import numpy as np
 import cv2
@@ -31,10 +32,10 @@ imageWidth = 1280
 imageHeight = 720
 font = cv2.FONT_HERSHEY_COMPLEX
 
-# Initialize the RealSense camera for RGB and Depth data
-myCam1 = Camera3D(mode='RGB&DEPTH', frameWidthRGB=imageWidth, frameHeightRGB=imageHeight)
-    
+# Initialize the RealSense camera for RGB and Depth datas
+myCam1 = QCarRealSense(mode='RGB, Depth', frameWidthRGB=imageWidth, frameHeightRGB=imageHeight)
 
+    
 
 
 #---------------------------------------#
@@ -176,6 +177,7 @@ try:
         myCam1.read_RGB()
         img = myCam1.imageBufferRGB
 
+        cv2.imshow('img', img)
             
         # Apply Preprocessing to Image
         ppImage = preProcess(img)

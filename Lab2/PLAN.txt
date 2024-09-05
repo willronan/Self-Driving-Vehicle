@@ -1,0 +1,8 @@
+Changes for system
+
+	- move motor command creation to motor class
+	- start slowly after stop sign
+	
+
+
+	- STRETCH GOAL: drive in left lane

@@ -43,6 +43,7 @@ dt = 0.033
 STEERING_COEF = 0.5
 THROTTLE_COEF = 0.1
 
+
 # Initialize CSI cameras
 frontCSI = QCarCameras(
 			frameWidth  = imageWidth,
@@ -62,23 +63,20 @@ gpad  = LogitechF710()
 
 
 def control_from_gamepad(LB, RT, leftLateral, A):
-    #----- 2.1 IMPLEMENT GAMEPAD CONTROLS -----#	
+
 	if LB == 1:
 			if A == 1 :
-
-				throttle = -THROTTLE_COEF * RT #going backward
-				steering = leftLateral * STEERING_COEF
+				throttle = THROTTLE_COEF* (RT-0.5) #going backward
+				steering = leftLateral * 0.5
 			else:
-				throttle = THROTTLE_COEF * RT #going forward
-				steering= leftLateral * STEERING_COEF
+				throttle = THROTTLE_COEF *-(RT-0.5) #going forward
+				steering = leftLateral * 0.5
 	else:
 		throttle = 0
-		steering = 0
+		steering  = 0
 
 	command = np.array([throttle, steering])
 	return command
-    #----------------------------------------#
-
 
 touch = 0
 
@@ -98,8 +96,8 @@ try:
         #---- 1 ISOLATE COLOURS WITH BINARY ----#
 		hsvBuf = cv2.cvtColor(croppedRGB, cv2.COLOR_BGR2HSV)
 		binaryImage = ImageProcessing.binary_thresholding(frame= hsvBuf,
-													lowerBounds=np.array([10, 55, 80]),
-													upperBounds=np.array([40, 255, 200]))
+													lowerBounds=np.array([10, 0, 0]),
+													upperBounds=np.array([40, 255, 255]))
 		
 
 		
