@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'lab5_groupX'
+package_name = 'lab4_groupX'
 
 setup(
     name=package_name,
@@ -14,17 +14,17 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='root',
-    maintainer_email='root@todo.todo',
+    maintainer='nvidia',
+    maintainer_email='nvidia@todo.todo',
     description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'lidar = lab5_groupX.lab5_lidar:main',
-            'motor = lab5_groupX.lab5_motor:main',
-            'steering = lab5_groupX.lab5_lane_detection:main',
-            'sign_detection = lab5_groupX.lab5_sign_detection:main',
+            'lidar = lab4_groupX.lab4_kmeans:main',
+            'motor = lab4_groupX.lab4_motor:main',
+            'gamepad = lab4_groupX.lab4_gamepad:main',
         ],
     },
+
 )

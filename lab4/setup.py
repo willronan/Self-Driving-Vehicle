@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'lab4_groupX'
+package_name = 'lab3_*your_group_number_here*'
 
 setup(
     name=package_name,
@@ -10,7 +10,6 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', ['launch/qcar_launch.py']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -21,10 +20,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'lidar = lab4_groupX.lab4_kmeans:main',
-            'motor = lab4_groupX.lab4_motor:main',
-            'gamepad = lab4_groupX.lab4_gamepad:main',
+            'publisher = lab3_*your_group_number_here*.lab3_publisher:main',
+            'subscriber = lab3_*your_group_number_here*.lab3_subscriber:main',
+
         ],
     },
-
 )

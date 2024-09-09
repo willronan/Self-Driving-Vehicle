@@ -28,12 +28,10 @@ class Motor(Node):
 
         # Create subscriber & add subscriptions
         super().__init__('motor')
-        self.detection_subscription = self.create_subscription(String, 'detection', self.detection_callback, 10)
-        self.steering_subscription = self.create_subscription(String, 'steering', self.steering_callback, 10)
+        self.steering_subscription = self.create_subscription(String, 'gamepad', self.steering_callback, 10)
         self.lidar_subscription = self.create_subscription(String, 'lidar', self.lidar_callback, 10)
         
         # prevent unused variable warning
-        self.detection_subscription  
         self.steering_subscription
         self.lidar_subscription
 
@@ -42,73 +40,26 @@ class Motor(Node):
         self.car = QCar()
 
         # Flags and counters
-        self.stop_flag = False
-        self.ignore_flag = False
-        self.ignore_timer = 0
-        self.front_obstacle_flag = False
-        self.rear_obstacle_flag = False
-
-
-    # Handle sign detection
-    def detection_callback(self, msg):
-        if msg.data == "Stop" and self.ignore_flag == False:
-            self.stop_flag = True
-        elif msg.data == "Go" or self.ignore_flag == True:
-            self.stop_flag = False
-        else: 
-            print("Camera not detected")
-            time.sleep(3)
-        time.sleep(0.1)
-
-        self.get_logger().info('A : "%s" was detected' % msg.data)
+        self.arrivedFlag = False
 
     # Handle lidar detections
     def lidar_callback(self, msg):
 
-        print(f"Lidar says {msg.data}")
-        if msg.data == "Front&Rear":
-            self.front_obstacle_flag = True
-            self.rear_obstacle_flag = True
-        elif msg.data == "Front":
-            self.front_obstacle_flag = True
-        elif msg.data == "Rear":
-            self.rear_obstacle_flag = True
-        elif msg.data == "None":
-            self.front_obstacle_flag = False
-            self.rear_obstacle_flag = False
-    
+        if msg.data == "true":
+            self.LEDs = np.array([1, 1, 1, 1, 1, 1, 1, 1])
+        if msg.data =="false":
+            self.LEDs = np.array([0, 0, 0, 0, 0, 0, 0, 0])
+        
 
     # Handle steering/motor command
     def steering_callback(self, msg):
 
         throttle, steer = map(float, msg.data.split(','))
 
-        # No stop sign / already waited, ignoring stop sign
-        if self.stop_flag == False:
-            # If stop sign is being ignored, stop ignoring after 3 s
-            if self.ignore_flag == True:
-                if time.time() - self.ignore_timer > 3:
-                    self.ignore_flag = False
-            # If the command is forwards, and there is no front obstacle, go forwards
-            if throttle > 0 and not self.front_obstacle_flag:
-                self.car.read_write_std(throttle, steer, self.LEDs)
-            # If the command is backwards, and there is no rear obstacle, go backwards
-            elif throttle < 0 and not self.rear_obstacle_flag:
-                self.car.read_write_std(throttle, steer, self.LEDs)
-            # Otherwise stop
-            else:
-                self.car.read_write_std(0, steer, self.LEDs)
-                
-        # If there is a stop sign
-        else:
-            # Stop
-            self.car.read_write_std(0, 0, self.LEDs)
-            # Wait 3 s, then continue, ignorin the stop sign 
-            if self.stop_flag == True:
-                time.sleep(3)
-                self.ignore_flag = True
-                self.ignore_timer = time.time()
-            self.get_logger().info('Motor controls processed')
+        print(msg.data)
+
+        # If the car is not in the rendezvous accept drive commands
+        self.car.read_write_std(throttle, steer, self.LEDs)    
 
     # Safely disconnect hardware
     def destroy(self):

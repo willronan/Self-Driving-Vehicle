@@ -1,4 +1,4 @@
-'''lab3_supervised_detection
+'''lab4_supervised_detection
 
 This walkthough has students compare 
 several supervised detection models

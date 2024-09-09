@@ -1,4 +1,4 @@
-'''lab3_publisher.py
+'''lab4_publisher.py
 
 This code will publish a simple
 go or stop command based on keyboard
