@@ -37,7 +37,7 @@ class Motor(Node):
 
         # Initialize car
         self.LEDs = np.array([0, 0, 0, 0, 0, 0, 0, 0])
-        self.car = QCar()
+        self.car = QCar(frequency=200)
 
         # Flags and counters
         self.arrivedFlag = False

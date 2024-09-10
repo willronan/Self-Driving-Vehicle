@@ -18,9 +18,9 @@ from std_msgs.msg import String
 
 # Quanser imports
 from pal.utilities.vision import Camera3D
-
-
 import time
+
+networkPath = "/home/nvidia/jetson-inference/python/training/detection/ssd/models/qsigns/"
 
 # Gamepad Node
 class Detector_Node(Node):
@@ -29,16 +29,15 @@ class Detector_Node(Node):
 
         super().__init__('detector_node')
 
-        # Create publisher 
-        self.publisher_ = self.create_publisher(String, 'detection', 10)
-
         imageWidth = 1280
         imageHeight = 720
 
         # Connect to remote controller & car hardware
         self.camera = Camera3D(mode='RGB&DEPTH', frameWidthRGB=imageWidth, frameHeightRGB=imageHeight)
-        self.net = detectNet("ssd-inception-v2", threshold=0.25)  #	trafficcamnet
-
+        self.net = detectNet(model=networkPath + "ssd-mobilenet.onnx", 
+            labels=networkPath + "labels.txt", input_blob="input_0", 
+            output_cvg="scores", output_bbox="boxes", 
+            threshold=0.2)
 
         self.perform_detection()
 
@@ -71,17 +70,13 @@ class Detector_Node(Node):
             detections = self.net.Detect(cudaImg)
 
             # Sort detections
-            if detections:
-                
+            if len(detections) == 1:
                 for detection in detections:
-                    if self.net.GetClassDesc(detection.ClassID) in ["road_sign", "stop sign"]:
-                        print("Sign Detected!")
-                        sign_detected = True
-
-            if sign_detected:
-                msg.data = "True"
+                    msg.data = str(detection.confidence)
+            elif len(detections) > 1:       
+                msg.data = str("FP")
             else:
-                msg.data = "False"
+                msg.data = "None"
 
 
             # Publish drive command
@@ -89,7 +84,7 @@ class Detector_Node(Node):
             self.get_logger().info(f"Publishing {msg.data} to the detection topic")
 
 
-            time.sleep(0.1)
+            time.sleep(0.01)
         
 
 

@@ -20,7 +20,7 @@ import pal.resources.rtmodels as rtmodels
 #endregion
 
 def setup(
-        initialPosition=[-0.031, 1.311, 0.000],
+        initialPosition=[5, 1.311, 0.000],
         initialOrientation=[0, 0, -np.pi/2],
         rtModel=rtmodels.QCAR
     ):

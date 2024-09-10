@@ -15,7 +15,6 @@ from std_msgs.msg import String
 
 # Quanser imports
 from pal.products.qcar import QCar
-from qcar_interfaces.msg import MotorCmd 
 
 # Standard imports
 import sys
