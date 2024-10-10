@@ -17,6 +17,7 @@ import time
 import os
 
 
+
 # Timing Parameters and methods
 startTime = time.time()
 def elapsed_time():
@@ -35,7 +36,8 @@ font = cv2.FONT_HERSHEY_COMPLEX
 # Initialize the RealSense camera for RGB and Depth datas
 myCam1 = QCarRealSense(mode='RGB, Depth', frameWidthRGB=imageWidth, frameHeightRGB=imageHeight)
 
-    
+import quanser
+ 
 
 
 #---------------------------------------#
@@ -126,6 +128,7 @@ def recognizeSign(img, ppImg):
         elif num_vertices == 8:
             shape = "Stop"  # More vertices indicate a rounder shape
             print(f"{shape} sign detected")
+
 
 
         #----------------------------------#

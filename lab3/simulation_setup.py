@@ -60,13 +60,7 @@ def setup(
 
 
 
-    # region: Yield sign
 
-    yieldSigns = QLabsYieldSign(qlabs)
-
-    yieldSigns.spawn(location =[-0.508, -4.327, 0.2], 
-                     rotation=[0,0, np.pi/2])
-     # endregion
 
     # region: roundabout
     NUMROUNDABOUTSIGNS = 3
@@ -79,7 +73,7 @@ def setup(
 
     # region: Spawn stopsign
     stop = QLabsStopSign(qlabs)
-    stop.spawn(location=[0.508, -4.327, 0.2], rotation=[0,0, np.pi/2],
+    stop.spawn(location=[0, -4.327, 0.2], rotation=[0,0, np.pi/2],
             scale=[1,1,1], configuration=0, waitForConfirmation=True)
     # endregion
 

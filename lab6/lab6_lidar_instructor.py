@@ -119,8 +119,6 @@ class RPLidar(Node):
     def detect_obstacles(self):
         try:
 
-
-
             while True:
 
                 # Preprocess data
