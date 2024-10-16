@@ -37,13 +37,6 @@ from pal.products.qcar import QCar
 import time
 
 
-
-#MODEL_NAME = 'faster_rcnn_inception_resnet_v2_atrous'
-# MODEL_NAME = 'faster_rcnn_resnet_101'
-# MODEL_NAME = 'faster_rcnn_resnet50'
-# MODEL_NAME = 'faster_rcnn_inception_v2'
-# MODEL_NAME = 'rfcn_resnet101'
-# MODEL_NAME = 'ssd_inception_v2'
 MODEL_NAME = 'ssd_mobilenet_v1'
 
 
@@ -108,9 +101,6 @@ class Detector():
                     self.camera.read_RGB()
                     image_np = self.camera.imageBufferRGB
 
-                    t1 = time.time()
-
-
                     image_np_expanded = np.expand_dims(image_np, axis=0)
                     image_tensor = self.detection_graph.get_tensor_by_name('image_tensor:0')
 
@@ -125,8 +115,6 @@ class Detector():
                     (boxes, scores, classes, num_detections) = sess.run(
                         [boxes, scores, classes, num_detections],
                         feed_dict={image_tensor: image_np_expanded})
-                    
-                    t2 = time.time()
 
                     # Visualization of the results of a detection.
                     vis_util.visualize_boxes_and_labels_on_image_array(
@@ -141,25 +129,8 @@ class Detector():
                     plt.axis('off')
                     plt.imshow(image_np)
 
-
                     cv2.imshow('Stream', image_np)
 
-                    # Sort detections
-                    if num_detections > 0:
-                        self.LEDs = np.array([0, 0, 0, 0, 1, 1, 0, 0])
-
-                    else:
-                        self.LEDs = np.array([0, 0, 0, 0, 0, 0, 0, 0])
-                        
-
-                    self.car.read_write_std(0, 0, self.LEDs)
-
-                    detectionTime = t2 - t1
-
-                    print(f"Detection time {detectionTime}")
-                    
-                    # Publish drive command
-                    
                     cv2.waitKey(100)
 
         except KeyboardInterrupt:

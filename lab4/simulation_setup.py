@@ -19,6 +19,9 @@ import pal.resources.rtmodels as rtmodels
 
 #endregion
 
+# Change to move stop sign
+SIGN_DISTANCE = 4.5
+
 def setup(
         initialPosition=[-0.031, 1.311, 0.000],
         initialOrientation=[0, 0, -np.pi/2],
@@ -59,27 +62,13 @@ def setup(
     # endregion
 
 
-
-    # region: Yield sign
-
-    yieldSigns = QLabsYieldSign(qlabs)
-
-    yieldSigns.spawn(location =[-0.508, -4.327, 0.2], 
-                     rotation=[0,0, np.pi/2])
-     # endregion
-
-    # region: roundabout
-    NUMROUNDABOUTSIGNS = 3
-    roundAboutSigns = []
-
-
     # region: Spawning Basic Shapes
     hBasicShape = QLabsBasicShape(qlabs)
     xOff = 0 #0.586
 
     # region: Spawn stopsign
     stop = QLabsStopSign(qlabs)
-    stop.spawn(location=[0.508, -4.327, 0.2], rotation=[0,0, np.pi/2],
+    stop.spawn(location=[0, -SIGN_DISTANCE, 0.2], rotation=[0,0, np.pi/2],
             scale=[1,1,1], configuration=0, waitForConfirmation=True)
     # endregion
 

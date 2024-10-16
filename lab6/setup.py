@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'lab5_groupX'
+package_name = 'lab6_groupX'
 
 setup(
     name=package_name,
@@ -21,10 +21,10 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'lidar = lab5_groupX.lab5_lidar:main',
-            'motor = lab5_groupX.lab5_motor:main',
-            'steering = lab5_groupX.lab5_lane_detection:main',
-            'sign_detection = lab5_groupX.lab5_sign_detection:main',
+            'lidar = lab6_groupX.lab6_lidar:main',
+            'motor = lab6_groupX.lab6_motor:main',
+            'steering = lab6_groupX.lab6_lane_detection:main',
+            'sign_detection = lab6_groupX.lab6_sign_detection:main',
         ],
     },
 )

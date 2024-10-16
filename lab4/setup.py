@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'lab3_*your_group_number_here*'
+package_name = 'lab4_*your_group_number_here*'
 
 setup(
     name=package_name,
@@ -20,8 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'publisher = lab3_*your_group_number_here*.lab3_publisher:main',
-            'subscriber = lab3_*your_group_number_here*.lab3_subscriber:main',
+            'publisher = lab4_*your_group_number_here*.lab4_publisher:main',
+            'subscriber = lab4_*your_group_number_here*.lab4_subscriber:main',
 
         ],
     },

@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'lab3'
+package_name = 'lab6'
 
 setup(
     name=package_name,
@@ -20,9 +20,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'publisher = lab3.lab3_publisher:main',
-            'subscriber = lab3.lab3_subscriber:main',
-            'detector = lab3.lab3_detector:main',
+            'publisher = lab6.lab6_publisher:main',
+            'subscriber = lab6.lab6_subscriber:main',
+            'detector = lab6.lab6_detector:main',
 
         ],
     },

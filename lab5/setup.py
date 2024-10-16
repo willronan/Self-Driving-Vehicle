@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = 'lab4_groupX'
+package_name = 'lab5_groupX'
 
 setup(
     name=package_name,
@@ -21,9 +21,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'lidar = lab4_groupX.lab4_kmeans:main',
-            'motor = lab4_groupX.lab4_motor:main',
-            'gamepad = lab4_groupX.lab4_gamepad:main',
+            'lidar = lab5_groupX.lab5_kmeans:main',
+            'motor = lab5_groupX.lab5_motor:main',
+            'gamepad = lab5_groupX.lab5_gamepad:main',
         ],
     },
 
