@@ -1,8 +1,7 @@
 '''lab4_publisher.py
 
 This code will publish a simple
-go or stop command based on keyboard
-input.
+go or stop 
 
 '''
 
@@ -24,9 +23,8 @@ from PIL import Image
 import sys
 import os
 import cv2
-# Append your Tensorflow object detection and darkflow directories to your path
-sys.path.append('~anaconda3/envs/tf_env/Lib/site-packages/object_detection') # ~/tensorflow/models/research/object_detection
-#sys.path.append('PATH_TO_DARKFLOW_FOLDER') # ~/darkflow
+# Append your Tensorflow object detection directories to your path
+sys.path.append(r'C:/Program Files/Python311/Lib/site-packages/tensorflow/models/research')
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
 
@@ -37,22 +35,15 @@ from pal.products.qcar import QCar
 import time
 
 
-
-#MODEL_NAME = 'faster_rcnn_inception_resnet_v2_atrous'
-# MODEL_NAME = 'faster_rcnn_resnet_101'
-# MODEL_NAME = 'faster_rcnn_resnet50'
-# MODEL_NAME = 'faster_rcnn_inception_v2'
-# MODEL_NAME = 'rfcn_resnet101'
-# MODEL_NAME = 'ssd_inception_v2'
 MODEL_NAME = 'ssd_mobilenet_v1'
 
 
 # Path to frozen detection graph. This is the actual model that is used for the traffic sign detection.
-MODEL_PATH = os.path.join('models', MODEL_NAME)
+MODEL_PATH = os.path.join(r'C:\bin\models', MODEL_NAME)
 PATH_TO_CKPT = os.path.join(MODEL_PATH,'inference_graph/frozen_inference_graph.pb')
 
 # List of the strings that is used to add correct label for each box.
-PATH_TO_LABELS = os.path.join('gtsdb_data', 'gtsdb3_label_map.pbtxt')
+PATH_TO_LABELS = os.path.join(r'C:\bin\models\gtsdb_data', 'gtsdb_label_map.pbtxt')
 
 NUM_CLASSES = 3
 
