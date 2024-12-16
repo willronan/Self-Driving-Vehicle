@@ -20,8 +20,8 @@ import time
 from enum import Enum
 
 # Advanced imports
-from sklearn.cluster import DBSCAN
-import matplotlib.pyplot as plt
+from sklearn.cluster import DBSCAN #pip install scikit-learn
+import matplotlib.pyplot as plt #pip install matplotlib
 
 class Obstical(Enum):
     FRONT_AND_REAR = 1

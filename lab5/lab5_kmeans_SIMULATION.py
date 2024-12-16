@@ -18,6 +18,8 @@ import time
 
 # Advanced imports
 from sklearn.cluster import KMeans
+#if sklearn is not found
+# use "pip install scikit-learn" in terminal
 import matplotlib.pyplot as plt
 from scipy.spatial import ConvexHull, Delaunay
 
